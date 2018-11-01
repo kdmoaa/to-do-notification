@@ -24,6 +24,49 @@ var year = document.getElementById('deadline-year');
 
 var submit = document.getElementById('submit');
 
+
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var context = new AudioContext();
+
+// Audio 用の buffer を読み込む
+var getAudioBuffer = function(url, fn) {
+    var req = new XMLHttpRequest();
+    // array buffer を指定
+    req.responseType = 'arraybuffer';
+
+    req.onreadystatechange = function() {
+        if (req.readyState === 4) {
+            if (req.status === 0 || req.status === 200) {
+                // array buffer を audio buffer に変換
+                context.decodeAudioData(req.response, function(buffer) {
+                    // コールバックを実行
+                    fn(buffer);
+                });
+            }
+        }
+    };
+
+    req.open('GET', url, true);
+    req.send('');
+};
+
+// サウンドを再生
+var playSound = function(buffer) {
+    // source を作成
+    var source = context.createBufferSource();
+    // buffer をセット
+    source.buffer = buffer;
+    // context に connect
+    source.connect(context.destination);
+    // 再生
+    source.start(0);
+};
+
+var stopSound = function() {
+    context.close();
+};
+
 window.onload = function() {
   note.innerHTML += '<li>App initialised.</li>';
   // In the following line, you should include the prefixes of implementations you want to test.
@@ -84,6 +127,7 @@ window.onload = function() {
     note.innerHTML += '<li>Object store created.</li>';
   };
 
+
   function displayData() {
     // first clear the content of the task list so that you don't get a huge long list of duplicate stuff each time
     //the display is updated.
@@ -113,8 +157,15 @@ window.onload = function() {
           listItem.innerHTML = cursor.value.taskTitle + ' — ' + cursor.value.hours + ':' + cursor.value.minutes + ', ' + cursor.value.month + ' ' + cursor.value.day + daySuffix + ' ' + cursor.value.year + '.';
 
           if(cursor.value.notified == "yes") {
-            listItem.style.textDecoration = "line-through";
-            listItem.style.color = "rgba(255,0,0,0.5)";
+// main
+              // 読み込み完了後にボタンにクリックイベントを登録
+              listItem.style.textDecoration = "line-through";
+              listItem.style.color = "rgba(255,0,0,0.5)";
+              // サウンドを読み込む
+              getAudioBuffer('sound.mp3', function(buffer) {
+                  playSound(buffer);
+              });
+
           }
 
           // put the item item inside the task list
@@ -307,6 +358,7 @@ window.onload = function() {
   // function for creating the notification
   function createNotification(title) {
 
+    navigator.serviceWorker.register('scripts/sw.js');
     // Let's check if the browser supports notifications
     if (!"Notification" in window) {
       console.log("This browser does not support notifications.");
@@ -318,7 +370,10 @@ window.onload = function() {
 
       var img = '/to-do-notifications/img/icon-128.png';
       var text = 'HEY! Your task "' + title + '" is now overdue.';
-      var notification = new Notification('To do list', { body: text, icon: img });
+      navigator.serviceWorker.ready.then(function(registration) {
+          registration.showNotification('Notification with ServiceWorker');
+      });
+      // var notification = new Notification('To do list', { body: text, icon: img });
 
       window.navigator.vibrate(500);
     }
@@ -376,4 +431,4 @@ window.onload = function() {
 
   // using a setInterval to run the checkDeadlines() function every second
   setInterval(checkDeadlines, 1000);
-}
+};
