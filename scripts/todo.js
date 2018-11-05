@@ -29,6 +29,14 @@ var submit = document.getElementById('submit');
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
+submit.addEventListener("click", function() {
+    var buf = context.createBuffer(1, 1, 22050);
+    var src = context.createBufferSource();
+    src.buffer = buf;
+    src.connect(context.destination);
+    src.start(0);
+});
+
 // Audio 用の buffer を読み込む
 var getAudioBuffer = function(url, fn) {
     var req = new XMLHttpRequest();
