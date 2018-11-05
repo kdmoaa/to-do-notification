@@ -26,7 +26,7 @@ var submit = document.getElementById('submit');
 
 
 
-window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
 submit.addEventListener("click", function() {
