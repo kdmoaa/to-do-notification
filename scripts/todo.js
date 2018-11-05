@@ -29,13 +29,13 @@ var submit = document.getElementById('submit');
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
-submit.addEventListener("click", function() {
+var silent = function() {
     var buf = context.createBuffer(1, 1, 22050);
     var src = context.createBufferSource();
     src.buffer = buf;
     src.connect(context.destination);
     src.start(0);
-});
+};
 
 // Audio 用の buffer を読み込む
 var getAudioBuffer = function(url, fn) {
@@ -76,6 +76,9 @@ var stopSound = function() {
 };
 
 window.onload = function() {
+  document.addEventListener("click", function() {
+      silent();
+  });
   note.innerHTML += '<li>App initialised.</li>';
   // In the following line, you should include the prefixes of implementations you want to test.
   window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
