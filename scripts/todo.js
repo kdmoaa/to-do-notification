@@ -89,6 +89,17 @@ window.onload = function() {
   // Let us open our database
   var DBOpenRequest = this.indexedDB.open("toDoList", 4);
 
+    // サウンドを読み込む
+    getAudioBuffer('sound.mp3', function(buffer) {
+        loadSound(buffer);
+
+
+        var event = 'click';
+        document.addEventListener(event, function() {
+            silent();
+        });
+    });
+
   // Gecko-only IndexedDB temp storage option:
   // var request = window.indexedDB.open("toDoList", {version: 4, storage: "temporary"});
 
@@ -133,17 +144,6 @@ window.onload = function() {
     objectStore.createIndex("notified", "notified", { unique: false });
 
     note.innerHTML += '<li>Object store created.</li>';
-
-    // サウンドを読み込む
-    getAudioBuffer('sound.mp3', function(buffer) {
-        loadSound(buffer);
-
-
-        var event = 'click';
-        document.addEventListener(event, function() {
-            silent();
-        });
-    });
   };
 
 
