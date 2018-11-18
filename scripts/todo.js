@@ -76,9 +76,6 @@ var stopSound = function() {
 };
 
 window.onload = function() {
-  document.addEventListener("click", function() {
-      silent();
-  });
   note.innerHTML += '<li>App initialised.</li>';
   // In the following line, you should include the prefixes of implementations you want to test.
   window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
@@ -175,6 +172,11 @@ window.onload = function() {
               // サウンドを読み込む
               getAudioBuffer('sound.mp3', function(buffer) {
                   playSound(buffer);
+
+                  var event = 'click';
+                  document.addEventListener(event, function() {
+                      silent();
+                  });
               });
 
           }
