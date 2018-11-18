@@ -24,6 +24,8 @@ var year = document.getElementById('deadline-year');
 
 var submit = document.getElementById('submit');
 
+var source;
+
 
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -60,15 +62,13 @@ var getAudioBuffer = function(url, fn) {
 };
 
 // サウンドを再生
-var playSound = function(buffer) {
+var loadSound = function(buffer) {
     // source を作成
-    var source = context.createBufferSource();
+    this.source = context.createBufferSource();
     // buffer をセット
-    source.buffer = buffer;
+    this.source.buffer = buffer;
     // context に connect
-    source.connect(context.destination);
-    // 再生
-    source.start(0);
+    this.source.connect(context.destination);
 };
 
 var stopSound = function() {
@@ -133,6 +133,17 @@ window.onload = function() {
     objectStore.createIndex("notified", "notified", { unique: false });
 
     note.innerHTML += '<li>Object store created.</li>';
+
+    // サウンドを読み込む
+    getAudioBuffer('sound.mp3', function(buffer) {
+        loadSound(buffer);
+
+
+        var event = 'click';
+        document.addEventListener(event, function() {
+            silent();
+        });
+    });
   };
 
 
@@ -169,16 +180,8 @@ window.onload = function() {
               // 読み込み完了後にボタンにクリックイベントを登録
               listItem.style.textDecoration = "line-through";
               listItem.style.color = "rgba(255,0,0,0.5)";
-              // サウンドを読み込む
-              getAudioBuffer('sound.mp3', function(buffer) {
-                  playSound(buffer);
-
-                  var event = 'click';
-                  document.addEventListener(event, function() {
-                      silent();
-                  });
-              });
-
+              // 再生
+              this.source.start(0);
           }
 
           // put the item item inside the task list
