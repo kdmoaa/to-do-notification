@@ -112,7 +112,7 @@ window.onload = function() {
                           listItem.style.color = "rgba(255,0,0,0.5)";
                           // 再生
                           // サウンドを読み込む
-                          getAudioBuffer('sound.mp3', function(buffer) {
+                          getAudioBuffer('sound-short.m4a', function(buffer) {
                               playSound(buffer);
                               var event = 'click';
                               document.addEventListener(event, function() {
