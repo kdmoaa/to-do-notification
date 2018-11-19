@@ -24,10 +24,6 @@ var year = document.getElementById('deadline-year');
 
 var submit = document.getElementById('submit');
 
-var source;
-
-
-
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
 
@@ -62,13 +58,15 @@ var getAudioBuffer = function(url, fn) {
 };
 
 // サウンドを再生
-var loadSound = function(buffer) {
+var playSound = function(buffer) {
     // source を作成
-    this.source = context.createBufferSource();
+    var source = context.createBufferSource();
     // buffer をセット
-    this.source.buffer = buffer;
+    source.buffer = buffer;
     // context に connect
-    this.source.connect(context.destination);
+    source.connect(context.destination);
+    // 再生
+    source.start(0);
 };
 
 var stopSound = function() {
@@ -88,17 +86,6 @@ window.onload = function() {
 
   // Let us open our database
   var DBOpenRequest = this.indexedDB.open("toDoList", 4);
-
-    // サウンドを読み込む
-    getAudioBuffer('sound.mp3', function(buffer) {
-        loadSound(buffer);
-
-
-        var event = 'click';
-        document.addEventListener(event, function() {
-            silent();
-        });
-    });
 
   // Gecko-only IndexedDB temp storage option:
   // var request = window.indexedDB.open("toDoList", {version: 4, storage: "temporary"});
@@ -181,7 +168,16 @@ window.onload = function() {
               listItem.style.textDecoration = "line-through";
               listItem.style.color = "rgba(255,0,0,0.5)";
               // 再生
-              this.source.start(0);
+              // サウンドを読み込む
+              getAudioBuffer('sound.mp3', function(buffer) {
+                  playSound(buffer);
+
+
+                  var event = 'click';
+                  document.addEventListener(event, function() {
+                      silent();
+                  });
+              });
           }
 
           // put the item item inside the task list
