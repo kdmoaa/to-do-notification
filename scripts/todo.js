@@ -77,6 +77,14 @@ var stopSound = function() {
 window.onload = function() {
   note.innerHTML += '<li>App initialised.</li>';
 
+  var eventName = typeof document.ontouchend !== 'undefined' ? 'touchend' : 'mouseup';
+  document.addEventListener(eventName, initAudioContext);
+  function initAudioContext() {
+      document.removeEventListener(eventName, initAudioContext);
+      // wake up AudioContext
+      ctx.resume();
+  };
+
   db = new PouchDB('todoList');
   var remoteCouch = false;
   displayData();
