@@ -113,11 +113,11 @@ window.onload = function() {
                           // 再生
                           // サウンドを読み込む
                           getAudioBuffer('sound-short.m4a', function(buffer) {
-                              playSound(buffer);
                               var event = 'click';
                               document.addEventListener(event, function() {
                                   silent();
                               });
+                              playSound(buffer);
                           });
                       }
 
