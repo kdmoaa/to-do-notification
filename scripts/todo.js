@@ -33,7 +33,6 @@ var silent = function() {
     src.buffer = buf;
     src.connect(context.destination);
     src.start(0);
-    context.resume();
 };
 
 // Audio 用の buffer を読み込む
