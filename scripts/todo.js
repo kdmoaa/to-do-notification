@@ -82,7 +82,7 @@ window.onload = function() {
   function initAudioContext() {
       document.removeEventListener(eventName, initAudioContext);
       // wake up AudioContext
-      ctx.resume();
+      context.resume();
   };
 
   db = new PouchDB('todoList');
