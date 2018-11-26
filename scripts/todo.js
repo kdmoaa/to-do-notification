@@ -252,15 +252,24 @@ window.onload = function() {
 
   // function for creating the notification
   function createNotification(title) {
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('scripts/sw.js', {
 
-    navigator.serviceWorker.register('scripts/sw.js')
-        .then(function () {
-            alert('navigator service worker register')
-        })
-        .catch(function () {
-            alert('navigator service worker failed')
-        });
-    // Let's check if the browser supports notifications
+          }).then(function(sw) {
+              alert('service worker register')
+          }).catch(function() {
+              alert('service workder failed')
+          });
+      } else {
+          alert('not work service worker')
+      }
+    // navigator.serviceWorker.register('scripts/sw.js')
+    //     .then(function () {
+    //         alert('navigator service worker register')
+    //     })
+    //     .catch(function () {
+    //         alert('navigator service worker failed')
+    //     });
 
       db.get(title).then(function (doc) {
             return db.put({ _id: doc.taskTitle, _rev:doc._rev, taskTitle: doc.taskTitle, hours: doc.hours, minutes: doc.minutes, day: doc.day, month: doc.month, year: doc.year, notified: "yes" })
