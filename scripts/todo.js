@@ -238,6 +238,7 @@ window.onload = function() {
                     default:
                     // alert('Incorrect month entered in database.');
                 }
+                alert('hours = ' + doc.hours + ' hourCheck = ' + hourCheck + ' minutes = ' + doc.minutes + ' minuteCheck = ' + minuteCheck + ' day = ' + doc.day + ' dayCheck = ' + dayCheck + ' monthNumber = ' + monthNumber + ' monthCheck = ' + monthCheck + ' year = ' + doc.year + ' yearCheck = ' + yearCheck + ' notified = ' + doc.notified);
                 if(+(doc.hours) == hourCheck && +(doc.minutes) == minuteCheck && +(doc.day) == dayCheck && monthNumber == monthCheck && doc.year == yearCheck && doc.notified == "no") {
 
                   // If the numbers all do match, run the createNotification() function to create a system notification
