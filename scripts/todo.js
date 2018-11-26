@@ -33,6 +33,7 @@ var silent = function() {
     src.buffer = buf;
     src.connect(context.destination);
     src.start(0);
+    alert('silent has passed')
 };
 
 // Audio 用の buffer を読み込む
@@ -48,6 +49,7 @@ var getAudioBuffer = function(url, fn) {
                 context.decodeAudioData(req.response, function(buffer) {
                     // コールバックを実行
                     fn(buffer);
+                    alert('decode audio data passed')
                 });
             }
         }
@@ -67,6 +69,7 @@ var playSound = function(buffer) {
     source.connect(context.destination);
     // 再生
     source.start(0);
+    alert('play sound has passed')
 };
 
 var stopSound = function() {
@@ -130,7 +133,7 @@ window.onload = function() {
                       listItem.appendChild(deleteButton);
                       deleteButton.innerHTML = 'X';
                       // here we are setting a data attribute on our delete button to say what task we want deleted if it is clicked!
-                      deleteButton.setAttribute('data-task', value.taskTitle);
+                      deleteButton.setAttribute('data-task', doc.taskTitle);
                       deleteButton.onclick = function(event) {
                         deleteItem(event);
                       }
@@ -238,9 +241,8 @@ window.onload = function() {
                     default:
                     // alert('Incorrect month entered in database.');
                 }
-                alert('hours = ' + doc.hours + ' hourCheck = ' + hourCheck + ' minutes = ' + doc.minutes + ' minuteCheck = ' + minuteCheck + ' day = ' + doc.day + ' dayCheck = ' + dayCheck + ' monthNumber = ' + monthNumber + ' monthCheck = ' + monthCheck + ' year = ' + doc.year + ' yearCheck = ' + yearCheck + ' notified = ' + doc.notified);
                 if(+(doc.hours) == hourCheck && +(doc.minutes) == minuteCheck && +(doc.day) == dayCheck && monthNumber == monthCheck && doc.year == yearCheck && doc.notified == "no") {
-
+                    alert('hour check has passed!')
                   // If the numbers all do match, run the createNotification() function to create a system notification
                   createNotification(doc.taskTitle);
                 }
@@ -251,7 +253,13 @@ window.onload = function() {
   // function for creating the notification
   function createNotification(title) {
 
-    navigator.serviceWorker.register('scripts/sw.js');
+    navigator.serviceWorker.register('scripts/sw.js')
+        .then(function () {
+            alert('navigator service worker register')
+        })
+        .catch(function () {
+            alert('navigator service worker failed')
+        });
     // Let's check if the browser supports notifications
 
       db.get(title).then(function (doc) {
